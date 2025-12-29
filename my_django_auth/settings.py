@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-
 """
 Django settings for my_django_auth project.
 
@@ -40,11 +39,18 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    'dj_rest_auth'
+    'dj_rest_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
 ]
+# django.contrib.sites
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -54,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "my_django_auth.urls"
@@ -61,7 +68,9 @@ ROOT_URLCONF = "my_django_auth.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / 'templates'
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -146,5 +155,21 @@ REST_AUTH = {
     "USE_JWT": True,
     # "JWT_AUTH_COOKIE": "_auth",  # Name of access token cookie
     # "JWT_AUTH_REFRESH_COOKIE": "_refresh", # Name of refresh token cookie
-    "JWT_AUTH_HTTPONLY": False,  # Makes sure refresh token is sent
+    "JWT_AUTH_HTTPONLY": False,  # Makes sure refresh token is sent,
+    # "REGISTER_SERIALIZER": "myapp.serializers.CustomRegisterSerializer",  # Commented out to fix import error
 }
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"  
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory" 
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True 
+LOGIN_URL = "/admin" 
+
+# Django SMTP
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "alobaakinsanmi119@gmail.com"
+EMAIL_HOST_PASSWORD = "duycflpndxsugilb"
